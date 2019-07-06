@@ -1,0 +1,42 @@
+====================================================================================================================================
+Shawn Chumbar
+CMPE 150: Final Project
+Professor Christina Parsa
+March 7, 2019
+============================================[ Files Included ]============================================
+final_skel.py
+finalcontroller_skel.py
+README
+
+============================================[ ARP Protocol ]============================================
+First we check for ARP
+	if there is ARP we then FLOOD.
+============================================[ ICMP Protocol ]============================================
+Next thing to do is check for ICMP; If we have ICMP, we do the following:
+	for floorSwitch1, we check to see if the destination of a packet is for Host10. If it is, we forward it to Host 10. However, if it is not Host 10, we forward it to the Core Switch. 
+	for floorSwitch2, we check to see if the destination of a packet is for Host20. If it is, we forward it to Host 20. However, if it is not Host 20, we forward it to the Core Switch. 
+	for floorSwitch3, we check to see if the destination of a packet is for Host30. If it is, we forward it to Host 30. However, if it is not Host 30, we forward it to the Core Switch. 
+	for Data Center Switch, we check to see if the destination of a packet is for Server. If it is, we forward it to Server. However, if it is not Server, we forward it to the Core Switch. 
+
+	With the previous switches mentioned above, it was very simple. We were either sending the packet to the host attatched to a switch or to the core switch.
+	
+	However, now we have to deal with the core Switch. In the core switch, we first check if the destination is untrusted host, then we send it to it. 
+	Then we check if the untrusted host is sending it to the trusted host, and if it is, we send it out through port 4. 
+	The next possibility is that untrustedHost is trying to send a packet to someone other than the trusted Host, so we just block it (Since we already checked the case of if it was untrusted and trusted host sending to eachother, we can assume that this case was taken care of earlier).
+	Next we check if the destination is host 10, host 20, host 30, or the trusted host and we send out the packet on the appropriate port. 
+	Then we check if the destination is untrustedHost, then we send packet. 
+	We check if the destination is the server and send the packet and 
+	lastly, we block the packet if it does not match any of these cases.
+
+============================================[ TCP Protocol ]============================================
+The process for TCP is similar, however there are several differences between the protocol for TCP and the protocol for ICMP.
+We check for TCP; If we have a TCP packet, we do the following:
+	The idea behind switches 1, 2, 3 and the Data Center Switch is the same. The key difference is the core Switch.
+	In the core switch for TCP, we check to see if the we are sending packets from the untrusted Host to the server, and if we are, we drop it. 
+	However, data from the Server to the untrusted Host should get through (This will still result in no communication as untrusted Host has no way of sending responses to the Server).
+	We can then also check if the destination is either the untrustedHost, and then we send stuff to it. 
+	The main difference in this version of the core switch is that we are allowing hosts 10/20/30 to communicate with the untrusted Server. 
+	However, the untrusted Server is still not allowed to communicate with the server.
+
+============================================[ Extra Comments/Concerns ]============================================
+I would definitely say that this lab was very difficult. I found that the hardest part about this lab was the absolute vagueness of the Final Project Lab Manual. Another thing that added to the confusion was the fact that some poeple did not know what to do, as some of the TA's were giving conflicting information towards tackling the lab. 
